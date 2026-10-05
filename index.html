@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Online Shoppers Purchasing Intention
+    </title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+    <!-- D3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="hero">
+
+    <div class="hero-inner">
+
+        <div class="hero-icon">
+            📊
+        </div>
+
+        <p class="eyebrow">
+            DATA VISUALIZATION TECHNOLOGY
+        </p>
+
+        <h1>
+            Online Shoppers Purchasing Intention 2019
+        </h1>
+
+        <p class="subtitle">
+            Interactive Data Visualization Dashboard
+        </p>
+
+        <p class="hero-description">
+            วิเคราะห์พฤติกรรมผู้เข้าชมเว็บไซต์
+            และแนวโน้มการตัดสินใจซื้อสินค้า
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- =================================================
+         FILTER
+    ================================================== -->
+
+    <section class="card controls">
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                🔎
+            </div>
+
+            <div>
+
+                <h2>
+                    ตัวกรองข้อมูล
+                </h2>
+
+                <p>
+                    เลือกข้อมูลที่ต้องการวิเคราะห์
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-grid">
+
+
+            <label>
+
+                <span>
+                    เดือน
+                </span>
+
+                <select id="monthFilter">
+
+                    <option value="All">
+                        ทั้งหมด
+                    </option>
+
+                </select>
+
+            </label>
+
+
+
+            <label>
+
+                <span>
+                    ประเภทผู้เข้าชม
+                </span>
+
+                <select id="visitorFilter">
+
+                    <option value="All">
+                        ทั้งหมด
+                    </option>
+
+                </select>
+
+            </label>
+
+
+
+            <label>
+
+                <span>
+                    การซื้อสินค้า
+                </span>
+
+                <select id="revenueFilter">
+
+                    <option value="All">
+                        ทั้งหมด
+                    </option>
+
+                    <option value="true">
+                        ซื้อ
+                    </option>
+
+                    <option value="false">
+                        ไม่ซื้อ
+                    </option>
+
+                </select>
+
+            </label>
+
+
+
+            <button id="resetBtn"
+                    type="button">
+
+                ↻ รีเซ็ตตัวกรอง
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         KPI
+    ================================================== -->
+
+    <section class="kpi-grid">
+
+
+        <div class="card kpi-card">
+
+            <div class="kpi-icon">
+                👥
+            </div>
+
+            <div>
+
+                <span>
+                    จำนวน Sessions
+                </span>
+
+                <strong id="kpiSessions">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card kpi-card">
+
+            <div class="kpi-icon">
+                🛒
+            </div>
+
+            <div>
+
+                <span>
+                    ซื้อสินค้า
+                </span>
+
+                <strong id="kpiRevenue">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card kpi-card">
+
+            <div class="kpi-icon">
+                📈
+            </div>
+
+            <div>
+
+                <span>
+                    อัตราการซื้อ
+                </span>
+
+                <strong id="kpiRate">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card kpi-card">
+
+            <div class="kpi-icon">
+                💰
+            </div>
+
+            <div>
+
+                <span>
+                    Page Value เฉลี่ย
+                </span>
+
+                <strong id="kpiPageValue">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         CHARTS
+    ================================================== -->
+
+    <section class="chart-grid">
+
+
+        <!-- =================================================
+             CHART 1
+        ================================================== -->
+
+        <article class="card chart-card">
+
+            <div class="chart-head">
+
+                <div>
+
+                    <span class="chart-number">
+                        GRAPH 01
+                    </span>
+
+                    <h2>
+                        จำนวนผู้เข้าชมรายเดือน
+                    </h2>
+
+                    <p>
+                        Line Chart
+                    </p>
+
+                </div>
+
+                <div class="chart-type">
+                    LINE
+                </div>
+
+            </div>
+
+
+            <div id="lineChart"
+                 class="chart">
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div id="lineDetails"
+                 class="chart-details">
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             CHART 2
+        ================================================== -->
+
+        <article class="card chart-card">
+
+            <div class="chart-head">
+
+                <div>
+
+                    <span class="chart-number">
+                        GRAPH 02
+                    </span>
+
+                    <h2>
+                        สัดส่วนการซื้อสินค้า
+                    </h2>
+
+                    <p>
+                        Donut Chart
+                    </p>
+
+                </div>
+
+                <div class="chart-type">
+                    DONUT
+                </div>
+
+            </div>
+
+
+            <div id="donutChart"
+                 class="chart">
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div id="donutDetails"
+                 class="chart-details">
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             CHART 3
+        ================================================== -->
+
+        <article class="card chart-card">
+
+            <div class="chart-head">
+
+                <div>
+
+                    <span class="chart-number">
+                        GRAPH 03
+                    </span>
+
+                    <h2>
+                        จำนวนการซื้อ
+                        แยกตามประเภทผู้เข้าชม
+                    </h2>
+
+                    <p>
+                        Bar Chart
+                    </p>
+
+                </div>
+
+                <div class="chart-type">
+                    BAR
+                </div>
+
+            </div>
+
+
+            <div id="visitorChart"
+                 class="chart">
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div id="visitorDetails"
+                 class="chart-details">
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             CHART 4
+        ================================================== -->
+
+        <article class="card chart-card">
+
+            <div class="chart-head">
+
+                <div>
+
+                    <span class="chart-number">
+                        GRAPH 04
+                    </span>
+
+                    <h2>
+                        จำนวน Sessions
+                        ตามประเภทวัน
+                    </h2>
+
+                    <p>
+                        Bar Chart
+                    </p>
+
+                </div>
+
+                <div class="chart-type">
+                    BAR
+                </div>
+
+            </div>
+
+
+            <div id="weekendChart"
+                 class="chart">
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div id="weekendDetails"
+                 class="chart-details">
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             CHART 5
+        ================================================== -->
+
+        <article class="card chart-card full-width">
+
+            <div class="chart-head">
+
+                <div>
+
+                    <span class="chart-number">
+                        GRAPH 05
+                    </span>
+
+                    <h2>
+                        จำนวน Sessions
+                        ตาม Traffic Type
+                    </h2>
+
+                    <p>
+                        Horizontal Bar Chart
+                        — 10 อันดับสูงสุด
+                    </p>
+
+                </div>
+
+                <div class="chart-type">
+                    TRAFFIC
+                </div>
+
+            </div>
+
+
+            <div id="trafficChart"
+                 class="chart traffic-chart">
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div id="trafficDetails"
+                 class="chart-details">
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         SUMMARY
+    ================================================== -->
+
+    <section class="card insight">
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                💡
+            </div>
+
+            <div>
+
+                <h2>
+                    สรุปการวิเคราะห์
+                </h2>
+
+                <p>
+                    ข้อมูลจาก Dashboard ที่กำลังแสดง
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <ul>
+
+            <li>
+                ใช้ <b>Revenue</b>
+                เป็นตัวแปรเป้าหมาย
+                เพื่อวิเคราะห์การตัดสินใจซื้อสินค้า
+            </li>
+
+            <li>
+                สามารถกรองข้อมูลด้วย
+                <b>Month</b>,
+                <b>VisitorType</b>
+                และ
+                <b>Revenue</b>
+            </li>
+
+            <li>
+                กราฟทั้งหมดเป็น Interactive
+                สามารถเลื่อนเมาส์เพื่อดูรายละเอียดข้อมูล
+            </li>
+
+            <li>
+                กราฟ Bar และ Line
+                มีการระบุชื่อแกน X และ Y อย่างชัดเจน
+            </li>
+
+            <li>
+                Donut Chart
+                ใช้แสดงสัดส่วนข้อมูล
+                จึงไม่มีแกน X และ Y
+            </li>
+
+        </ul>
+
+    </section>
+
+
+
+    <p id="status"
+       class="status">
+    </p>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+        Online Shoppers Purchasing Intention Dataset
+    </p>
+
+    <p>
+        Data Visualization Technology
+    </p>
+
+</footer>
+
+
+
+<!-- JavaScript -->
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
